@@ -275,7 +275,6 @@ elif page == "საწყობი":
     with st.expander("✏️ სასტარტო ნაშთების რედაქტირება"):
         st.caption("შეიყვანეთ აღწერის თარიღი და ნაშთები → შენახვა")
 
-        # აღწერის თარიღი — ერთი მთელი სიისთვის
         cur_aghwera = None
         if stock_data:
             dates = [r.get("aghwera_tarixi") for r in stock_data if r.get("aghwera_tarixi")]
@@ -286,12 +285,22 @@ elif page == "საწყობი":
             value=cur_aghwera or date.today()
         )
 
+        search = st.text_input("🔍 პროდუქტის ძებნა", placeholder="მაგ. TOM FORD...", key="stock_search")
+
         stock_df = pd.DataFrame([
             {"დასახელება": r["dasaxeleba"], "სასტარტო ნაშთი": int(stock_map.get(r["dasaxeleba"], 0))}
             for r in cat_data
         ])
+
+        if search.strip():
+            filtered_df = stock_df[stock_df["დასახელება"].str.contains(search.strip(), case=False, na=False)]
+        else:
+            filtered_df = stock_df
+
+        st.caption(f"ნაჩვენებია: {len(filtered_df)} / {len(stock_df)}")
+
         edited_stock = st.data_editor(
-            stock_df,
+            filtered_df,
             use_container_width=True,
             hide_index=True,
             disabled=["დასახელება"],
