@@ -310,17 +310,16 @@ elif page == "საწყობი":
             key="stock_editor"
         )
         if st.button("💾 სასტარტო ნაშთების შენახვა", type="primary", use_container_width=True):
-            saved = 0
-            for _, row in edited_stock.iterrows():
-                name = row["დასახელება"]
-                val  = int(row["სასტარტო ნაშთი"])
-                payload = {"satarto_nashti": val, "aghwera_tarixi": str(aghwera_date)}
-                if name in stock_ids:
-                    sb_patch("satskhob", "dasaxeleba", name, payload)
-                else:
-                    sb_post("satskhob", {"dasaxeleba": name, **payload})
-                saved += 1
-            st.success(f"✅ შენახულია: {saved} პროდუქტი (აღწერის თარიღი: {aghwera_date})")
+            with st.spinner("იწერება..."):
+                for _, row in edited_stock.iterrows():
+                    name    = row["დასახელება"]
+                    val     = int(row["სასტარტო ნაშთი"])
+                    payload = {"satarto_nashti": val, "aghwera_tarixi": str(aghwera_date)}
+                    if name in stock_ids:
+                        sb_patch("satskhob", "dasaxeleba", name, payload)
+                    else:
+                        sb_post("satskhob", {"dasaxeleba": name, **payload})
+            st.success(f"✅ შენახულია! (თარიღი: {aghwera_date})")
             load_stock.clear()
             st.rerun()
 
@@ -421,17 +420,22 @@ elif page == "აღწერა":
     )
 
     if st.button("💾 შენახვა და შედარება", type="primary", use_container_width=True):
-        # წავშალოთ ძველი ჩანაწერები ამ თარიღისთვის
-        if prev:
-            for p in prev:
-                sb_delete("aghwera", p["id"])
-        # ჩავწეროთ ახალი
-        for _, row in edited_agh.iterrows():
-            sb_post("aghwera", {
-                "tarixi":             str(aghwera_tarixi),
-                "dasaxeleba":         row["დასახელება"],
-                "factobrivi_nashti":  int(row["ფაქტობრივი"]),
-            })
+        with st.spinner("იწერება..."):
+            # ძველი წაშლა — ერთი მოთხოვნით
+            get_session().delete(
+                f"{URL}/rest/v1/aghwera",
+                params={"tarixi": f"eq.{aghwera_tarixi}"}
+            )
+            # ბულკ ჩასმა — ყველა ერთდროულად
+            records = [
+                {
+                    "tarixi":            str(aghwera_tarixi),
+                    "dasaxeleba":        row["დასახელება"],
+                    "factobrivi_nashti": int(row["ფაქტობრივი"]),
+                }
+                for _, row in edited_agh.iterrows()
+            ]
+            get_session().post(f"{URL}/rest/v1/aghwera", json=records)
         st.success("✅ შენახულია!")
         st.rerun()
 
