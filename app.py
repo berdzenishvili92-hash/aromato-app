@@ -343,6 +343,16 @@ elif page == "საწყობი":
 
     st.dataframe(display_df, use_container_width=True, hide_index=True)
 
+    # Excel გადმოწერა
+    out = io.BytesIO()
+    with pd.ExcelWriter(out, engine="openpyxl") as writer:
+        display_df.to_excel(writer, index=False, sheet_name="ნაშთი")
+    fname = f"nashti_{filter_date}.xlsx" if filter_date else "nashti_mimdinare.xlsx"
+    st.download_button("📥 Excel-ად გადმოწერა", data=out.getvalue(),
+                       file_name=fname,
+                       mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                       use_container_width=True)
+
 # ════════════════════════════════════════════════════════════════
 # 4. აღწერა
 # ════════════════════════════════════════════════════════════════
