@@ -330,6 +330,17 @@ elif page == "საწყობი":
 
     title = f"ნაშთი {filter_date}-მდე" if filter_date else "მიმდინარე ნაშთი"
     st.subheader(f"📊 {title}")
+
+    # ჯამური სტატისტიკა
+    total_products = len(df[df["ნაშთი"] > 0])
+    total_units    = int(df[df["ნაშთი"] > 0]["ნაშთი"].sum())
+    zero_products  = len(df[df["ნაშთი"] <= 0])
+
+    c1, c2, c3 = st.columns(3)
+    c1.metric("📦 პროდუქტი ნაშთით", total_products)
+    c2.metric("🔢 სულ ცალი", total_units)
+    c3.metric("⚠️ ნულოვანი", zero_products)
+
     st.dataframe(display_df, use_container_width=True, hide_index=True)
 
 # ════════════════════════════════════════════════════════════════
