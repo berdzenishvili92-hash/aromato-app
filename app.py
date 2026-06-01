@@ -152,7 +152,7 @@ if page == "გაყიდვა":
         with col2:
             raodenoba        = st.number_input("რაოდენობა", min_value=1, value=1, step=1)
             ghirebuleba      = st.number_input("ღირებულება (₾)", min_value=0.0, step=0.5, format="%.2f")
-            gadakhdis_metodi = st.selectbox("გადახდის მეთოდი", ["თიბისი", "საქართველო", "ნაღდი"])
+            gadakhdis_metodi = st.selectbox("გადახდის მეთოდი", ["თიბისი", "საქართველო", "ნაღდი", "ინდმეწარმე"])
 
         submitted = st.form_submit_button("✅ შენახვა", use_container_width=True, type="primary")
 
