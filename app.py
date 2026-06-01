@@ -636,15 +636,31 @@ elif page == "რეპორტები":
         geo_sum  = df[df["gadakhdis_metodi"]=="საქართველო"]["ghirebuleba"].sum()
         cash_sum = df[df["gadakhdis_metodi"]=="ნაღდი"]["ghirebuleba"].sum()
 
-        # ── მეტრიკები ─────────────────────────────────────────
+        # ── Responsive CSS ────────────────────────────────────
         st.markdown("""
         <style>
         [data-testid="metric-container"]{
             background:linear-gradient(135deg,#1e293b,#0f172a);
             border:1px solid #334155;border-radius:12px;
-            padding:16px;
+            padding:14px;
         }
-        [data-testid="stMetricValue"]{font-size:1.6rem;font-weight:700}
+        [data-testid="stMetricValue"]{font-size:1.4rem;font-weight:700}
+
+        /* მობილური — მეტრიკები 2x2 */
+        @media (max-width: 640px){
+            [data-testid="stMetricValue"]{font-size:1.1rem}
+            [data-testid="metric-container"]{padding:10px}
+            [data-testid="stHorizontalBlock"]{flex-wrap:wrap}
+            [data-testid="stHorizontalBlock"] > div{
+                min-width:48% !important;
+                flex:1 1 48% !important;
+            }
+            /* სათაური პატარა */
+            h1{font-size:1.4rem !important}
+            h2{font-size:1.1rem !important}
+            /* sidebar ვიწრო */
+            section[data-testid="stSidebar"]{min-width:200px !important}
+        }
         </style>""", unsafe_allow_html=True)
 
         m1,m2,m3,m4 = st.columns(4)
@@ -655,7 +671,8 @@ elif page == "რეპორტები":
 
         st.markdown("<br>", unsafe_allow_html=True)
 
-        col_a, col_b = st.columns(2)
+        # მობილურზე ერთი სვეტი, დესქტოპზე — ორი
+        col_a, col_b = st.columns([1, 1])
 
         # ── დონატი — თანხა ────────────────────────────────────
         with col_a:
@@ -675,12 +692,12 @@ elif page == "რეპორტები":
                                 x=0.5, y=0.5, showarrow=False,
                                 font=dict(size=18, color="#f1f5f9"))
             fig1.update_layout(
-                title=dict(text="გადახდის მეთოდი — თანხა", font=dict(size=15, color="#f1f5f9"), x=0.5),
+                title=dict(text="გადახდის მეთოდი — თანხა", font=dict(size=14, color="#f1f5f9"), x=0.5),
                 paper_bgcolor=BG, plot_bgcolor=BG, font=FONT,
                 showlegend=True,
-                legend=dict(orientation="h", yanchor="bottom", y=-0.15, xanchor="center", x=0.5,
-                            font=dict(color="#cbd5e1")),
-                margin=dict(t=50, b=40, l=20, r=20), height=360
+                legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5,
+                            font=dict(color="#cbd5e1", size=11)),
+                margin=dict(t=40, b=50, l=10, r=10), height=320
             )
             st.plotly_chart(fig1, use_container_width=True)
 
@@ -703,12 +720,12 @@ elif page == "რეპორტები":
                                 x=0.5, y=0.5, showarrow=False,
                                 font=dict(size=18, color="#f1f5f9"))
             fig2.update_layout(
-                title=dict(text="გადახდის მეთოდი — ცალები", font=dict(size=15, color="#f1f5f9"), x=0.5),
+                title=dict(text="გადახდის მეთოდი — ცალები", font=dict(size=14, color="#f1f5f9"), x=0.5),
                 paper_bgcolor=BG, plot_bgcolor=BG, font=FONT,
                 showlegend=True,
-                legend=dict(orientation="h", yanchor="bottom", y=-0.15, xanchor="center", x=0.5,
-                            font=dict(color="#cbd5e1")),
-                margin=dict(t=50, b=40, l=20, r=20), height=360
+                legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5,
+                            font=dict(color="#cbd5e1", size=11)),
+                margin=dict(t=40, b=50, l=10, r=10), height=320
             )
             st.plotly_chart(fig2, use_container_width=True)
 
@@ -724,13 +741,13 @@ elif page == "რეპორტები":
         fig3.update_traces(marker_line_width=0, opacity=0.9)
         fig3.update_layout(
             title=dict(text="დღიური გაყიდვები — გადახდის მეთოდი",
-                       font=dict(size=15, color="#f1f5f9"), x=0.5),
+                       font=dict(size=14, color="#f1f5f9"), x=0.5),
             paper_bgcolor=BG, plot_bgcolor="rgba(15,23,42,0.6)",
             legend=dict(title="", orientation="h", yanchor="bottom", y=1.02,
-                        xanchor="right", x=1, font=dict(color="#cbd5e1")),
-            xaxis=dict(gridcolor="#1e293b", tickfont=dict(color="#94a3b8")),
-            yaxis=dict(gridcolor="#1e293b", tickfont=dict(color="#94a3b8"), ticksuffix=" ₾"),
-            margin=dict(t=50, b=30), height=350
+                        xanchor="right", x=1, font=dict(color="#cbd5e1", size=11)),
+            xaxis=dict(gridcolor="#1e293b", tickfont=dict(color="#94a3b8", size=10)),
+            yaxis=dict(gridcolor="#1e293b", tickfont=dict(color="#94a3b8", size=10), ticksuffix=" ₾"),
+            margin=dict(t=50, b=20, l=10, r=10), height=300
         )
         st.plotly_chart(fig3, use_container_width=True)
 
@@ -753,12 +770,12 @@ elif page == "რეპორტები":
         )
         fig4.update_layout(
             title=dict(text="TOP 10 — ყველაზე გაყიდვადი პროდუქტი",
-                       font=dict(size=15, color="#f1f5f9"), x=0.5),
+                       font=dict(size=14, color="#f1f5f9"), x=0.5),
             paper_bgcolor=BG, plot_bgcolor="rgba(15,23,42,0.6)",
             coloraxis_showscale=False,
-            xaxis=dict(gridcolor="#1e293b", tickfont=dict(color="#94a3b8"), ticksuffix=" ₾"),
-            yaxis=dict(gridcolor="#1e293b", tickfont=dict(color="#94a3b8"),
+            xaxis=dict(gridcolor="#1e293b", tickfont=dict(color="#94a3b8", size=10), ticksuffix=" ₾"),
+            yaxis=dict(gridcolor="#1e293b", tickfont=dict(color="#94a3b8", size=9),
                        categoryorder="total ascending"),
-            margin=dict(t=50, b=20, r=100), height=400
+            margin=dict(t=40, b=10, l=10, r=90), height=370
         )
         st.plotly_chart(fig4, use_container_width=True)
