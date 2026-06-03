@@ -660,8 +660,8 @@ elif page == "რეპორტები":
         df["ghirebuleba"] = pd.to_numeric(df["ghirebuleba"], errors="coerce").fillna(0)
         df["tarixi"]      = pd.to_datetime(df["tarixi"])
 
-        COLORS  = ["#6366f1", "#f59e0b", "#10b981"]
-        CMAP    = {"თიბისი": "#6366f1", "საქართველო": "#f59e0b", "ნაღდი": "#10b981"}
+        COLORS  = ["#6366f1", "#f59e0b", "#10b981", "#e11d48"]
+        CMAP    = {"თიბისი": "#6366f1", "საქართველო": "#f59e0b", "ნაღდი": "#10b981", "ინდმეწარმე": "#e11d48"}
         BG      = "rgba(0,0,0,0)"
         FONT    = dict(family="sans-serif", size=13, color="#e2e8f0")
 
@@ -669,6 +669,7 @@ elif page == "რეპორტები":
         tbc_sum  = df[df["gadakhdis_metodi"]=="თიბისი"]["ghirebuleba"].sum()
         geo_sum  = df[df["gadakhdis_metodi"]=="საქართველო"]["ghirebuleba"].sum()
         cash_sum = df[df["gadakhdis_metodi"]=="ნაღდი"]["ghirebuleba"].sum()
+        ind_sum  = df[df["gadakhdis_metodi"]=="ინდმეწარმე"]["ghirebuleba"].sum()
 
         # ── Responsive CSS ────────────────────────────────────
         st.markdown("""
@@ -697,11 +698,12 @@ elif page == "რეპორტები":
         }
         </style>""", unsafe_allow_html=True)
 
-        m1,m2,m3,m4 = st.columns(4)
-        m1.metric("სულ ბრუნვა",    f"{total:,.2f} ₾")
-        m2.metric("💳 თიბისი",      f"{tbc_sum:,.2f} ₾")
-        m3.metric("🏦 საქართველო", f"{geo_sum:,.2f} ₾")
-        m4.metric("💵 ნაღდი",       f"{cash_sum:,.2f} ₾")
+        m1,m2,m3,m4,m5 = st.columns(5)
+        m1.metric("სულ ბრუნვა",      f"{total:,.2f} ₾")
+        m2.metric("💳 თიბისი",        f"{tbc_sum:,.2f} ₾")
+        m3.metric("🏦 საქართველო",   f"{geo_sum:,.2f} ₾")
+        m4.metric("💵 ნაღდი",         f"{cash_sum:,.2f} ₾")
+        m5.metric("🧾 ინდმეწარმე",   f"{ind_sum:,.2f} ₾")
 
         st.markdown("<br>", unsafe_allow_html=True)
 
