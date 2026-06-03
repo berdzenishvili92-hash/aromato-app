@@ -512,7 +512,7 @@ elif page == "ჟურნალი":
                 hide_index=True,
                 column_config={
                     "დასახელება":    st.column_config.SelectboxColumn("დასახელება", options=catalog),
-                    "გადახდის მეთოდი": st.column_config.SelectboxColumn("გადახდის მეთოდი", options=["თიბისი","საქართველო","ნაღდი"]),
+                    "გადახდის მეთოდი": st.column_config.SelectboxColumn("გადახდის მეთოდი", options=["თიბისი","საქართველო","ნაღდი","ინდმეწარმე"]),
                     "თარიღი":        st.column_config.DateColumn("თარიღი"),
                     "ღირებულება":    st.column_config.NumberColumn("ღირებულება", format="%.2f"),
                     "რაოდენობა":     st.column_config.NumberColumn("რაოდენობა", min_value=1),
